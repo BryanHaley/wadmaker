@@ -41,7 +41,7 @@ The behavior of WadMaker can be modified with several command-line options. To u
 - **-mipmaps** - Enables the extraction of texture mipmaps.
 - **-nofullbright** - Disables extraction of fullbright mask images.
 - **-overwrite** - Enables overwriting of existing files when extracting textures.
-- **-format: \<fmt\>** - Extracted images output format (\<fmt\> must be `png`, `jpg`, `gif`, `bmp` or `tga`).
+- **-format \<fmt\>** - Extracted images output format (\<fmt\> must be `png`, `jpg`, `gif`, `bmp` or `tga`).
 - **-indexed** - Extract textures as 8-bit indexed images (only works with png and bmp).
 - **-remove** - Removes embedded textures from a bsp file.
 - **-nologfile** - Stops WadMaker from creating a 'wadmaker - directoryname.log' file when making wad files.
