@@ -7,7 +7,15 @@ namespace Shared
     {
         #region Reading
 
+        public static short ReadShort(this Stream stream) => BitConverter.ToInt16(stream.ReadBytes(2), 0);
+
         public static ushort ReadUshort(this Stream stream) => BitConverter.ToUInt16(stream.ReadBytes(2), 0);
+
+        public static int ReadInt24(this Stream stream)
+        {
+            var data = ReadBytes(stream, 3);
+            return (data[0]) | (data[1] << 8) | (data[2] << 16);
+        }
 
         public static int ReadInt(this Stream stream) => BitConverter.ToInt32(stream.ReadBytes(4), 0);
 
@@ -42,6 +50,13 @@ namespace Shared
             var data = stream.ReadBytes(4);
             Array.Reverse(data);
             return BitConverter.ToInt32(data, 0);
+        }
+
+        public static uint ReadUintBigEndian(this Stream stream)
+        {
+            var data = stream.ReadBytes(4);
+            Array.Reverse(data);
+            return BitConverter.ToUInt32(data, 0);
         }
 
 

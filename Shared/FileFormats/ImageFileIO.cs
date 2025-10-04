@@ -22,6 +22,7 @@ namespace Shared.FileFormats
                 new ImageReader(),
                 new KraReader(),
                 new PsdReader(),
+                new PdnReader(),
             };
 
             _extensionReaderMapping = new Dictionary<string, IImageReader>(StringComparer.InvariantCultureIgnoreCase);
