@@ -30,7 +30,7 @@ namespace Shared.Sprites
         public static Sprite CreateSprite(SpriteType type, SpriteTextureFormat textureFormat, int maxWidth, int maxHeight, Rgba32[] palette)
         {
             if (maxWidth < 1 || maxHeight < 1) throw new ArgumentException("Width and height must greater than zero.");
-            if (palette.Length > 256) throw new ArgumentException("Palette must not contain more than 256 colors.", nameof(palette));
+            if (palette.Length > Constants.MaxPaletteSize) throw new ArgumentException($"Palette must not contain more than {Constants.MaxPaletteSize} colors.", nameof(palette));
 
             return new Sprite(
                 type,

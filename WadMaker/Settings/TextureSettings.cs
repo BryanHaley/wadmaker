@@ -55,7 +55,7 @@ namespace WadMaker.Settings
 
         /// <summary>
         /// Fullbright mask pixels with an alpha value equal to or above this value will be treated as fullbright pixels.
-        /// Defaults to 128.
+        /// Defaults to <see cref="Constants.DefaultTransparencyThreshold"/>.
         /// </summary>
         public int? FullbrightAlphaThreshold { get; set; }
 
@@ -86,7 +86,7 @@ namespace WadMaker.Settings
         /// <summary>
         /// Pixels with an alpha value below this value will be ignored when the palette is created.
         /// For color-keyed textures (whose name must start with a '{'), they will be mapped to the last color in the palette.
-        /// Defaults to 128 for transparent textures, and to 0 for all other textures.
+        /// Defaults to <see cref="Constants.DefaultTransparencyThreshold"/> for transparent textures, and to 0 for all other textures.
         /// </summary>
         public int? TransparencyThreshold { get; set; }
 

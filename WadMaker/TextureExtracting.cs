@@ -148,7 +148,7 @@ namespace WadMaker
 
             var width = texture.Width >> mipmap;
             var height = texture.Height >> mipmap;
-            var decalColor = texture.Palette[255];
+            var decalColor = texture.Palette[Constants.DecalColorIndex];
 
             var image = new Image<Rgba32>(width, height);
             image.ProcessPixelRows(accessor =>
@@ -186,7 +186,7 @@ namespace WadMaker
                     for (int x = 0; x < image.Width; x++)
                     {
                         var paletteIndex = imageData[y * width + x];
-                        if (paletteIndex == 255 && hasColorKey)
+                        if (paletteIndex == Constants.TransparentColorIndex && hasColorKey)
                         {
                             rowSpan[x] = new Rgba32(0, 0, 0, 0);
                         }

@@ -366,8 +366,8 @@ namespace SpriteMaker
         {
             if (sourceArea.Width > destinationArea.Width || sourceArea.Height > destinationArea.Height)
                 throw new InvalidOperationException($"Cannot copy sprite frame, image frame too small (must be at least {sourceArea.Width}x{sourceArea.Height} but is {destinationArea.Width}x{destinationArea.Height}).");
-            if (palette.Length < 256)
-                throw new ArgumentException($"Palette must contain 256 colors, but contains only {palette.Length} colors.");
+            if (palette.Length < Constants.MaxPaletteSize)
+                throw new ArgumentException($"Palette must contain {Constants.MaxPaletteSize} colors, but contains only {palette.Length} colors.");
 
             var getColor = (textureFormat == SpriteTextureFormat.IndexAlpha) ? (Func<byte, Rgba32>)GetIndexAlphaColor :
                             (textureFormat == SpriteTextureFormat.AlphaTest) ? (Func<byte, Rgba32>)GetAlphaTestColor :
@@ -389,11 +389,11 @@ namespace SpriteMaker
 
             Rgba32 GetIndexAlphaColor(byte index)
             {
-                var color = palette[255];
+                var color = palette[Constants.DecalColorIndex];
                 color.A = index;
                 return color;
             }
-            Rgba32 GetAlphaTestColor(byte index) => (index == 255) ? new Rgba32(0, 0, 0, 0) : palette[index];
+            Rgba32 GetAlphaTestColor(byte index) => (index == Constants.TransparentColorIndex) ? new Rgba32(0, 0, 0, 0) : palette[index];
             Rgba32 GetPaletteColor(byte index) => palette[index];
         }
 

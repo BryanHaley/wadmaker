@@ -98,7 +98,7 @@ namespace SpriteMaker.Settings
 
         /// <summary>
         /// Pixels with an alpha value below this value will be ignored when the palette is created, and they will be mapped to the last color in the palette.
-        /// Defaults to 128.
+        /// Defaults to <see cref="Constants.DefaultTransparencyThreshold"/>.
         /// This setting only applies to alpha-test sprites.
         /// </summary>
         public int? AlphaTestTransparencyThreshold { get; set; }

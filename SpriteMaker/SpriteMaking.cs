@@ -552,7 +552,7 @@ namespace SpriteMaker
                         color => color.A == 0);
                     spriteColor = ColorQuantization.GetAverageColor(colorHistogram);
                 }
-                var palette = Enumerable.Range(0, 255)
+                var palette = Enumerable.Range(0, Constants.MaxPaletteSize - 1)
                     .Select(i => new Rgba32((byte)i, (byte)i, (byte)i))
                     .Append(spriteColor)
                     .ToArray();
@@ -573,7 +573,7 @@ namespace SpriteMaker
                 }
 
                 // Create a suitable palette, taking sprite texture format into account:
-                var maxColors = isAlphaTest ? 255 : 256;
+                var maxColors = isAlphaTest ? Constants.MaxPaletteSize - 1 : Constants.MaxPaletteSize;
                 var colorClusters = ColorQuantization.GetColorClusters(colorHistogram, maxColors);
 
                 // Always make sure we've got a 256-color palette (some tools can't handle smaller palettes):
@@ -612,11 +612,8 @@ namespace SpriteMaker
 
         private static Func<Rgba32, bool> MakeTransparencyPredicate(FrameImage frameImage, bool isAlphaTest)
         {
-            var transparencyThreshold = isAlphaTest ? Math.Clamp(frameImage.Settings.AlphaTestTransparencyThreshold ?? 128, 0, 255) : 0;
-            if (frameImage.Settings.AlphaTestTransparencyColor is Rgba32 transparencyColor)
-                return color => color.A < transparencyThreshold || (color.R == transparencyColor.R && color.G == transparencyColor.G && color.B == transparencyColor.B);
-
-            return color => color.A < transparencyThreshold;
+            var transparencyThreshold = isAlphaTest ? Math.Clamp(frameImage.Settings.AlphaTestTransparencyThreshold ?? Constants.DefaultTransparencyThreshold, 0, 255) : 0;
+            return Util.MakeTransparencyPredicate(transparencyThreshold, frameImage.Settings.AlphaTestTransparencyColor);
         }
 
         private static byte[] CreateFrameImageData(

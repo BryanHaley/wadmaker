@@ -39,9 +39,9 @@ namespace Shared
             if (mipmap1Data != null && mipmap1Data.Length != width * height / 4) throw new ArgumentException("Mipmap 1 data must be 'width/2 x height/2' bytes.", nameof(mipmap1Data));
             if (mipmap2Data != null && mipmap2Data.Length != width * height / 16) throw new ArgumentException("Mipmap 2 data must be 'width/4 x height/4' bytes.", nameof(mipmap2Data));
             if (mipmap3Data != null && mipmap3Data.Length != width * height / 64) throw new ArgumentException("Mipmap 3 data must be 'width/8 x height/8' bytes.", nameof(mipmap3Data));
-            if (palette != null && palette.Count() > 256) throw new ArgumentException("Palette must not contain more than 256 colors.", nameof(palette));
+            if (palette != null && palette.Count() > Constants.MaxPaletteSize) throw new ArgumentException($"Palette must not contain more than {Constants.MaxPaletteSize} colors.", nameof(palette));
 
-            return new Texture(TextureType.MipmapTexture, name, width, height, imageData ?? new byte[width * height], palette?.ToArray() ?? new Rgba32[256]) {
+            return new Texture(TextureType.MipmapTexture, name, width, height, imageData ?? new byte[width * height], palette?.ToArray() ?? new Rgba32[Constants.MaxPaletteSize]) {
                 Mipmap1Data = mipmap1Data ?? new byte[width * height / 4],
                 Mipmap2Data = mipmap2Data ?? new byte[width * height / 16],
                 Mipmap3Data = mipmap3Data ?? new byte[width * height / 64],
@@ -57,9 +57,9 @@ namespace Shared
         {
             if (width < 1 || height < 1) throw new ArgumentException("Width and height must be greater than zero.");
             if (imageData != null && imageData.Length != width * height) throw new ArgumentException("Image data must be 'width x height' bytes.", nameof(imageData));
-            if (palette != null && palette.Count() > 256) throw new ArgumentException("Palette must not contain more than 256 colors.", nameof(palette));
+            if (palette != null && palette.Count() > Constants.MaxPaletteSize) throw new ArgumentException($"Palette must not contain more than {Constants.MaxPaletteSize} colors.", nameof(palette));
 
-            return new Texture(TextureType.SimpleTexture, name, width, height, imageData ?? new byte[width * height], palette?.ToArray() ?? new Rgba32[256]);
+            return new Texture(TextureType.SimpleTexture, name, width, height, imageData ?? new byte[width * height], palette?.ToArray() ?? new Rgba32[Constants.MaxPaletteSize]);
         }
 
         public static Texture CreateFont(
@@ -78,9 +78,9 @@ namespace Shared
             if (rowCount < 1) throw new ArgumentException("Row height must be greater than zero.", nameof(rowHeight));
             if (charInfos.Count() != 256) throw new ArgumentException("Exactly 256 char infos must be provided.", nameof(charInfos));
             if (imageData != null && imageData.Length != width * height) throw new ArgumentException("Image data must be 'width x height' bytes.", nameof(imageData));
-            if (palette != null && palette.Count() > 256) throw new ArgumentException("Palette must not contain more than 256 colors.", nameof(palette));
+            if (palette != null && palette.Count() > Constants.MaxPaletteSize) throw new ArgumentException($"Palette must not contain more than {Constants.MaxPaletteSize} colors.", nameof(palette));
 
-            return new Texture(TextureType.Font, name, width, height, imageData ?? new byte[width * height], palette?.ToArray() ?? new Rgba32[256]) {
+            return new Texture(TextureType.Font, name, width, height, imageData ?? new byte[width * height], palette?.ToArray() ?? new Rgba32[Constants.MaxPaletteSize]) {
                 RowCount = rowCount,
                 RowHeight = rowHeight,
                 CharInfos = charInfos?.ToArray() ?? new CharInfo[256],

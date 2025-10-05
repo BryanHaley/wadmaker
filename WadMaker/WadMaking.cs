@@ -443,7 +443,7 @@ namespace WadMaker
         {
             var mainSourceFile = sourceFiles.Single(file => (file.Settings.MipmapLevel ?? MipmapLevel.Main) == MipmapLevel.Main);
             var indexedMainImage = ImageFileIO.LoadIndexedImage(mainSourceFile.Path);
-            var palette = indexedMainImage.Palette.Concat(Enumerable.Range(0, 256 - indexedMainImage.Palette.Length).Select(i => new Rgba32())).ToArray();
+            var palette = indexedMainImage.Palette.Concat(Enumerable.Range(0, Constants.MaxPaletteSize - indexedMainImage.Palette.Length).Select(i => new Rgba32())).ToArray();
 
             var indexedMipmapImages = new IndexedImage?[3];
             foreach (var sourceFile in sourceFiles)
@@ -470,14 +470,14 @@ namespace WadMaker
                 var resizePalette = palette.ToArray();
                 if (isDecalsWad)
                 {
-                    var decalColor = resizePalette[255];
-                    resizePalette = Enumerable.Range(0, 256)
+                    var decalColor = resizePalette[Constants.MaxPaletteSize - 1];
+                    resizePalette = Enumerable.Range(0, Constants.MaxPaletteSize)
                         .Select(i => new Rgba32(decalColor.R, decalColor.G, decalColor.B, (byte)i))
                         .ToArray();
                 }
                 else if (TextureName.IsTransparent(textureName))
                 {
-                    resizePalette[255] = new Rgba32(0, 0, 0, 0);
+                    resizePalette[Constants.TransparentColorIndex] = new Rgba32(0, 0, 0, 0);
                 }
 
                 // Create a true-color copy of the main image, for resizing:
@@ -488,7 +488,7 @@ namespace WadMaker
 
                 var colorIndexMappingCache = new Dictionary<Rgba32, int>();
                 var isAnimatedTexture = TextureName.IsAnimated(textureName);
-                var transparencyThreshold = Math.Clamp(mainSourceFile.Settings.TransparencyThreshold ?? 128, 0, 255);
+                var transparencyThreshold = Math.Clamp(mainSourceFile.Settings.TransparencyThreshold ?? Constants.DefaultTransparencyThreshold, 0, 255);
                 Func<Rgba32, bool> isTransparentPredicate = color => color.A < transparencyThreshold;
 
                 for (int i = 0; i < indexedMipmapImages.Length; i++)
@@ -527,7 +527,7 @@ namespace WadMaker
 
             // The last palette color determines the color of the decal. All other colors are irrelevant - palette indexes are treated as alpha values instead.
             var decalColor = textureSettings.DecalColor ?? ColorQuantization.GetAverageColor(ColorQuantization.GetColorHistogram(mipmaps, color => color.A == 0));
-            var palette = Enumerable.Range(0, 255)
+            var palette = Enumerable.Range(0, Constants.MaxPaletteSize - 1)
                 .Select(i => new Rgba32((byte)i, (byte)i, (byte)i))
                 .Append(decalColor)
                 .ToArray();
@@ -562,20 +562,11 @@ namespace WadMaker
         {
             // Any pixel with an alpha value below the configured threshold will be treated as transparent.
             // It's also possible to treat a specific color as transparent:
-            var transparencyThreshold = Math.Clamp(textureSettings.TransparencyThreshold ?? 128, 0, 255);
-            Func<Rgba32, bool> isTransparentPredicate;
-            if (textureSettings.TransparencyColor != null)
-            {
-                var transparencyColor = textureSettings.TransparencyColor.Value;
-                isTransparentPredicate = color => color.A < transparencyThreshold || (color.R == transparencyColor.R && color.G == transparencyColor.G && color.B == transparencyColor.B);
-            }
-            else
-            {
-                isTransparentPredicate = color => color.A < transparencyThreshold;
-            }
+            var transparencyThreshold = Math.Clamp(textureSettings.TransparencyThreshold ?? Constants.DefaultTransparencyThreshold, 0, 255);
+            var isTransparentPredicate = Util.MakeTransparencyPredicate(transparencyThreshold, textureSettings.TransparencyColor);
 
             // Create the palette, and make sure we end up with a 256-color palette (some tools can't handle smaller palettes):
-            var maxColors = 255;
+            var maxColors = Constants.MaxPaletteSize - 1;
             var images = new[] { mainImage }.Concat(mipmapImages.Where(image => image != null));
             var colorHistogram = ColorQuantization.GetColorHistogram(images!, isTransparentPredicate);
             var colorClusters = ColorQuantization.GetColorClusters(colorHistogram, maxColors);
@@ -627,7 +618,7 @@ namespace WadMaker
         private static Texture CreateWaterTexture(string textureName, TextureSettings textureSettings, Image<Rgba32> mainImage, IReadOnlyList<Image<Rgba32>?> mipmapImages, Logger logger)
         {
             // Create the palette, and make sure we end up with a 256-color palette (some tools can't handle smaller palettes):
-            var maxColors = 254;
+            var maxColors = Constants.MaxPaletteSize - 2;
             var images = new[] { mainImage }.Concat(mipmapImages.Where(image => image != null));
             var colorHistogram = ColorQuantization.GetColorHistogram(images!, color => false);
             var colorClusters = ColorQuantization.GetColorClusters(colorHistogram, maxColors);
@@ -682,7 +673,7 @@ namespace WadMaker
         private static Texture CreateNormalTexture(string textureName, TextureSettings textureSettings, Image<Rgba32> mainImage, IReadOnlyList<Image<Rgba32>?> mipmapImages, Logger logger)
         {
             // Create the palette, and make sure we end up with a 256-color palette (some tools can't handle smaller palettes):
-            var maxColors = 256;
+            var maxColors = Constants.MaxPaletteSize;
             var images = new[] { mainImage }.Concat(mipmapImages.Where(image => image != null));
             var colorHistogram = ColorQuantization.GetColorHistogram(images!, color => false);
             var colorClusters = ColorQuantization.GetColorClusters(colorHistogram, maxColors);
@@ -737,8 +728,8 @@ namespace WadMaker
         {
             // With fullbright textures, the last 32 colors are used for full-bright pixels:
             var maxFullbrightColors = 32;
-            var maxNormalColors = 256 - maxFullbrightColors;
-            var fullbrightAlphaThreshold = textureSettings.FullbrightAlphaThreshold ?? 128;
+            var maxNormalColors = Constants.MaxPaletteSize - maxFullbrightColors;
+            var fullbrightAlphaThreshold = Math.Clamp(textureSettings.FullbrightAlphaThreshold ?? Constants.DefaultTransparencyThreshold, 0, 255);
 
             var normalImages = new[] { mainImage }.Concat(mipmapImages).ToArray();
             var fullbrightImages = new[] { fullbrightMaskImage }.Concat(fullbrightMipmapImages).ToArray();
@@ -846,7 +837,7 @@ namespace WadMaker
             if (mainFile.Settings.PreservePalette == true && ImageFileIO.IsIndexed(mainFile.Path))
             {
                 var indexedImage = ImageFileIO.LoadIndexedImage(mainFile.Path);
-                var palette = indexedImage.Palette.Concat(Enumerable.Range(0, 256 - indexedImage.Palette.Length).Select(i => new Rgba32())).ToArray();
+                var palette = indexedImage.Palette.Concat(Enumerable.Range(0, Constants.MaxPaletteSize - indexedImage.Palette.Length).Select(i => new Rgba32())).ToArray();
 
                 return Texture.CreateSimpleTexture(
                     name: textureName,
@@ -860,7 +851,7 @@ namespace WadMaker
             using (var image = ImageFileIO.LoadImage(mainFile.Path))
             {
                 var colorHistogram = ColorQuantization.GetColorHistogram(new[] { image }, color => false);
-                var maxColors = 256;
+                var maxColors = Constants.MaxPaletteSize;
                 var colorClusters = ColorQuantization.GetColorClusters(colorHistogram, maxColors);
 
                 // Always make sure we've got a 256-color palette (some tools can't handle smaller palettes):

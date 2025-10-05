@@ -11,7 +11,7 @@ namespace Shared
         /// </summary>
         public static (Rgba32 averageColor, Rgba32[] colors)[] GetColorClusters(
             IDictionary<Rgba32, int> colorHistogram,
-            int maxColors = 256)
+            int maxColors = Constants.MaxPaletteSize)
         {
             var uniqueColors = colorHistogram.Keys.ToHashSet();
             if (uniqueColors.Count <= maxColors)
@@ -126,7 +126,7 @@ namespace Shared
 
         /// <summary>
         /// Creates a lookup function that, for a given color, returns the index of the nearest color in the palette.
-        /// Transparent colors are mapped to palette index 255.
+        /// Transparent colors are mapped to palette index <see cref="Constants.TransparentColorIndex"/>.
         /// NOTE: The given color index mapping dictionary is used for memoization, and will be modified (no internal copy is created for performance reasons).
         /// </summary>
         public static Func<Rgba32, int> CreateColorIndexLookup(Rgba32[] palette, IDictionary<Rgba32, int> colorIndexMappingCache, Func<Rgba32, bool> isTransparent)
@@ -134,7 +134,7 @@ namespace Shared
             return color =>
             {
                 if (isTransparent(color))
-                    return 255;
+                    return Constants.TransparentColorIndex;
 
                 if (colorIndexMappingCache.TryGetValue(color, out var index))
                     return index;
