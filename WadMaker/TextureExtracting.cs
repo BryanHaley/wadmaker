@@ -175,7 +175,7 @@ namespace WadMaker
 
             var width = texture.Width >> mipmap;
             var height = texture.Height >> mipmap;
-            var hasColorKey = TextureName.IsTransparent(texture.Name);
+            var hasColorKey = TextureName.IsTransparent(texture.Name) || texture.Type == TextureType.SimpleTexture;
 
             var image = new Image<Rgba32>(width, height);
             image.ProcessPixelRows(accessor =>

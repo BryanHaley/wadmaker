@@ -850,8 +850,13 @@ namespace WadMaker
 
             using (var image = ImageFileIO.LoadImage(mainFile.Path))
             {
-                var colorHistogram = ColorQuantization.GetColorHistogram(new[] { image }, color => false);
-                var maxColors = Constants.MaxPaletteSize;
+                // Qpics are alpha-test textures:
+                var textureSettings = mainFile.Settings;
+                var transparencyThreshold = Math.Clamp(textureSettings.TransparencyThreshold ?? Constants.DefaultTransparencyThreshold, 0, 255);
+                var isTransparentPredicate = Util.MakeTransparencyPredicate(transparencyThreshold, textureSettings.TransparencyColor);
+
+                var maxColors = Constants.MaxPaletteSize - 1;
+                var colorHistogram = ColorQuantization.GetColorHistogram(new[] { image }, isTransparentPredicate);
                 var colorClusters = ColorQuantization.GetColorClusters(colorHistogram, maxColors);
 
                 // Always make sure we've got a 256-color palette (some tools can't handle smaller palettes):
@@ -861,6 +866,12 @@ namespace WadMaker
                         .Concat(Enumerable.Range(0, maxColors - colorClusters.Length).Select(i => (new Rgba32(), new[] { new Rgba32() })))
                         .ToArray();
                 }
+
+                // The last palette slot is reserved for transparent areas:
+                var colorKey = new Rgba32(0, 0, 255);
+                colorClusters = colorClusters
+                    .Append((colorKey, new[] { colorKey }))         // Slot 255: used for transparent pixels
+                    .ToArray();
 
                 // Create the actual palette, and a color index lookup cache:
                 var palette = colorClusters
@@ -875,7 +886,7 @@ namespace WadMaker
                 }
 
                 // Create texture data:
-                var textureData = CreateTextureData(image, palette, colorIndexMappingCache, mainFile.Settings, color => false, disableDithering: false);
+                var textureData = CreateTextureData(image, palette, colorIndexMappingCache, mainFile.Settings, isTransparentPredicate, disableDithering: false);
 
                 return Texture.CreateSimpleTexture(
                     name: textureName,
