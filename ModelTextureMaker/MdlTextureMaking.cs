@@ -646,7 +646,7 @@ namespace ModelTextureMaker
                 }
             }
 
-            if (!IsDmBaseInputFilename(textureName) && !IsRemapXInputFilename(textureName))
+            if (!IsDmBaseInputFilename(textureName) && !IsRemapXInputFilename(textureName) && !textureSourceFiles.Any(file => file.Settings.IsModelPortrait == true))
             {
                 if (textureSourceFiles.Any(file => (file.Settings.ColorMask ?? ColorMask.Main) != ColorMask.Main))
                 {
