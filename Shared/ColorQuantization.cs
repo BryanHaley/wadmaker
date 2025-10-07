@@ -1,10 +1,53 @@
-﻿using SixLabors.ImageSharp;
+﻿using Shared.FileFormats.Indexed;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Shared
 {
     public static class ColorQuantization
     {
+        /// <summary>
+        /// Generates a suitable palette from the given image and converts it to an indexed image.
+        /// Dithering can be disabled and specific pixels can be skipped if required.
+        /// </summary>
+        public static IndexedImage QuantizeImage(
+            Image<Rgba32> image,
+            int maxColors = Constants.MaxPaletteSize,
+            DitheringAlgorithm ditheringAlgorithm = DitheringAlgorithm.FloydSteinberg,
+            float ditherScale = 1,
+            Func<Rgba32, bool>? isTransparent = null,
+            Func<int, int, Rgba32, bool>? ignorePixel = null)
+        {
+            if (ignorePixel == null)
+            {
+                if (isTransparent != null)
+                    ignorePixel = (x, y, color) => isTransparent(color);
+                else
+                    ignorePixel = (x, y, color) => false;
+            }
+
+            var colorHistogram = new Dictionary<Rgba32, int>();
+            UpdateColorHistogram(colorHistogram, image.Frames[0], ignorePixel);
+
+            var colorClusters = GetColorClusters(colorHistogram, maxColors);
+            var palette = colorClusters.Select(cluster => cluster.averageColor).ToArray();
+
+            var colorIndexMappingCache = new Dictionary<Rgba32, int>();
+            var getColorIndex = CreateColorIndexLookup(palette, colorIndexMappingCache, isTransparent ?? (color => false));
+
+            if (ditheringAlgorithm == DitheringAlgorithm.FloydSteinberg)
+            {
+                var imageData = Dithering.FloydSteinberg(image, palette, (x, y, color) => getColorIndex(color), ditherScale, ignorePixel);
+                return new IndexedImage(imageData, image.Width, image.Height, palette);
+            }
+            else
+            {
+                var imageData = Dithering.None(image, getColorIndex);
+                return new IndexedImage(imageData, image.Width, image.Height, palette);
+            }
+        }
+
+
         /// <summary>
         /// Divides the colors in the given histogram into clusters, using a modified median-cut algorithm.
         /// Returns an array of (average-color, nearby-colors) tuples.

@@ -4,19 +4,30 @@ namespace Shared
 {
     public static class ModelTextureName
     {
-        private static Regex RemapTextureNameRegex = new Regex(@"^remap._(?<start1>\d{1,3})_(?<end1>\d{1,3})_(?<end2>\d{1,3})\.bmp$", RegexOptions.IgnoreCase);
+        private static Regex DmBaseTextureNameRegex = new Regex(@"^dm_base(?:\.bmp)?", RegexOptions.IgnoreCase);
+        private static Regex RemapTextureNameRegex = new Regex(@"^remap[0-9a-z]_(?<start1>\d{3})_(?<end1>\d{3})_(?<end2>\d{3})(?:\.bmp)?$", RegexOptions.IgnoreCase);
 
 
-        public static bool IsRemap(string textureName, out int color1Start, out int color1End, out int color2End)
+        public static bool IsDmBase(string textureName, out int color1Start, out int color1End, out int color2End)
         {
-            if (string.Equals(textureName, "dm_base.bmp", StringComparison.InvariantCultureIgnoreCase))
+            if (DmBaseTextureNameRegex.IsMatch(textureName))
             {
                 color1Start = 160;
                 color1End = 191;
                 color2End = 223;
                 return true;
             }
+            else
+            {
+                color1Start = 0;
+                color1End = 0;
+                color2End = 0;
+                return false;
+            }
+        }
 
+        public static bool IsRemap(string textureName, out int color1Start, out int color1End, out int color2End)
+        {
             var match = RemapTextureNameRegex.Match(textureName);
             if (match.Success)
             {

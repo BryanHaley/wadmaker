@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WadMaker", "WadMaker\WadMaker.csproj", "{D7145292-1958-4015-B41C-A150D04DB3DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{A6489FDE-01A0-4796-ACEA-0D78598D06B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpriteMaker", "SpriteMaker\SpriteMaker.csproj", "{0403FCD1-888D-4790-9DCB-59A625468841}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelTextureMaker", "ModelTextureMaker\ModelTextureMaker.csproj", "{CF48C336-F7B0-4D4A-9C62-D963F61EC839}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{0403FCD1-888D-4790-9DCB-59A625468841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0403FCD1-888D-4790-9DCB-59A625468841}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0403FCD1-888D-4790-9DCB-59A625468841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF48C336-F7B0-4D4A-9C62-D963F61EC839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF48C336-F7B0-4D4A-9C62-D963F61EC839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF48C336-F7B0-4D4A-9C62-D963F61EC839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF48C336-F7B0-4D4A-9C62-D963F61EC839}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
