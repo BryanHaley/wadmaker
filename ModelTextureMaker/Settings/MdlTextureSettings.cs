@@ -5,8 +5,19 @@ namespace ModelTextureMaker.Settings
 {
     enum ColorMask
     {
+        /// <summary>
+        /// Main colors, will be rendered as-is.
+        /// </summary>
         Main = 0,
+
+        /// <summary>
+        /// First remap color range. Hue is controlled by the top color value.
+        /// </summary>
         Color1 = 1,
+
+        /// <summary>
+        /// Second remap color range, hue is controlled by the bottom color value.
+        /// </summary>
         Color2 = 2,
     }
 
