@@ -92,7 +92,7 @@ namespace SpriteMaker
             var spritesUpdated = 0;
             var spritesRemoved = 0;
 
-            CreateDirectory(outputDirectory);
+            Util.CreateDirectory(outputDirectory);
 
             var successfulSpriteInputs = new Dictionary<string, SpriteMakingHistory.SpriteHistory>();
 
@@ -292,7 +292,7 @@ namespace SpriteMaker
                             throw new InvalidUsageException($"Unable to convert '{sourceFile.Path}': missing converter arguments.");
 
                         var conversionOutputPath = Path.Combine(conversionOutputDirectory, spriteName);
-                        CreateDirectory(conversionOutputDirectory);
+                        Util.CreateDirectory(conversionOutputDirectory);
 
                         var outputFilePaths = ExternalConversion.ExecuteConversionCommand(sourceFile.Settings.Converter, sourceFile.Settings.ConverterArguments, sourceFile.Path, conversionOutputPath, logger);
                         if (outputFilePaths.Length < 1)
@@ -666,12 +666,6 @@ namespace SpriteMaker
 
                 yield return path;
             }
-        }
-
-        private static void CreateDirectory(string? path)
-        {
-            if (!string.IsNullOrEmpty(path))
-                Directory.CreateDirectory(path);
         }
     }
 }

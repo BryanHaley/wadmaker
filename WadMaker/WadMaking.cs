@@ -145,7 +145,7 @@ namespace WadMaker
                 }
 
                 // Save the wad file:
-                CreateDirectory(Path.GetDirectoryName(outputWadFilePath));
+                Util.CreateDirectory(Path.GetDirectoryName(outputWadFilePath));
                 wad.Save(outputWadFilePath);
 
                 // Also save information about this build operation, to enable future incremental updates:
@@ -326,7 +326,7 @@ namespace WadMaker
                         throw new InvalidUsageException($"Unable to convert '{sourceFile.Path}': missing converter arguments.");
 
                     var conversionOutputPath = Path.Combine(conversionOutputDirectory, textureName);
-                    CreateDirectory(conversionOutputDirectory);
+                    Util.CreateDirectory(conversionOutputDirectory);
 
                     var outputFilePaths = ExternalConversion.ExecuteConversionCommand(sourceFile.Settings.Converter, sourceFile.Settings.ConverterArguments, sourceFile.Path, conversionOutputPath, logger);
                     if (outputFilePaths.Length < 1)
@@ -1019,12 +1019,6 @@ namespace WadMaker
         {
             logger.Log($"Loading wad file: '{filePath}'.");
             return Wad.Load(filePath, (index, name, exception) => logger.Log($"- Failed to load texture #{index} ('{name}'): {exception.GetType().Name}: '{exception.Message}'."));
-        }
-
-        private static void CreateDirectory(string? path)
-        {
-            if (!string.IsNullOrEmpty(path))
-                Directory.CreateDirectory(path);
         }
     }
 }

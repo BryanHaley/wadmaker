@@ -58,7 +58,7 @@ namespace ModelTextureMaker
             var texturesUpdated = 0;
             var texturesRemoved = 0;
 
-            CreateDirectory(outputDirectory);
+            Util.CreateDirectory(outputDirectory);
 
             var successfulTextureInputs = new Dictionary<string, MdlTextureMakingHistory.MdlTextureHistory>();
 
@@ -260,7 +260,7 @@ namespace ModelTextureMaker
                             throw new InvalidUsageException($"Unable to convert '{sourceFile.Path}': missing converter arguments.");
 
                         var conversionOutputPath = Path.Combine(conversionOutputDirectory, textureName);
-                        CreateDirectory(conversionOutputDirectory);
+                        Util.CreateDirectory(conversionOutputDirectory);
 
                         var outputFilePaths = ExternalConversion.ExecuteConversionCommand(sourceFile.Settings.Converter, sourceFile.Settings.ConverterArguments, sourceFile.Path, conversionOutputPath, logger);
                         if (outputFilePaths.Length < 1)
@@ -714,12 +714,6 @@ namespace ModelTextureMaker
 
                 yield return path;
             }
-        }
-
-        private static void CreateDirectory(string? path)
-        {
-            if (!string.IsNullOrEmpty(path))
-                Directory.CreateDirectory(path);
         }
     }
 }

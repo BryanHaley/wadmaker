@@ -1,8 +1,6 @@
 ﻿using Shared.Sprites;
 using SixLabors.ImageSharp.Formats.Gif;
-using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing.Processors.Quantization;
 using SixLabors.ImageSharp;
 using System.Diagnostics;
 using Shared;
@@ -77,7 +75,7 @@ namespace SpriteMaker
             var imageFilesCreated = 0;
             var imageFilesSkipped = 0;
 
-            CreateDirectory(outputDirectory);
+            Util.CreateDirectory(outputDirectory);
 
             foreach (var path in Directory.EnumerateFiles(inputDirectory, "*.spr"))
             {
@@ -414,13 +412,6 @@ namespace SpriteMaker
                     indexedImageFrame[destinationArea.X + dx, destinationArea.Y + dy] = index;
                 }
             }
-        }
-
-
-        private static void CreateDirectory(string? path)
-        {
-            if (!string.IsNullOrEmpty(path))
-                Directory.CreateDirectory(path);
         }
     }
 }

@@ -45,7 +45,7 @@ namespace WadMaker
                 textures = wadFile.Textures;
             }
 
-            CreateDirectory(outputDirectory);
+            Util.CreateDirectory(outputDirectory);
 
             var isDecalsWad = Path.GetFileName(inputFilePath).ToLowerInvariant() == "decals.wad";
             foreach (var texture in textures)
@@ -133,7 +133,7 @@ namespace WadMaker
             wad.Textures.AddRange(embeddedTextures);
 
             // NOTE: The output file will be overwritten if it already exists:
-            CreateDirectory(Path.GetDirectoryName(outputWadFilePath));
+            Util.CreateDirectory(Path.GetDirectoryName(outputWadFilePath));
             wad.Save(outputWadFilePath);
 
             logger.Log($"Extracted {embeddedTextures.Count} textures from '{inputBspFilePath}' to '{outputWadFilePath}', in {stopwatch.Elapsed.TotalSeconds:0.000} seconds.");
@@ -249,13 +249,6 @@ namespace WadMaker
                     texture.Palette[4].R);
             }
             return settings;
-        }
-
-
-        private static void CreateDirectory(string? path)
-        {
-            if (!string.IsNullOrEmpty(path))
-                Directory.CreateDirectory(path);
         }
     }
 }

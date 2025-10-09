@@ -16,5 +16,11 @@ namespace Shared
                 return color => color.A < transparencyThreshold;
             }
         }
+
+        public static void CreateDirectory(string? path)
+        {
+            if (!string.IsNullOrEmpty(path))
+                Directory.CreateDirectory(path);
+        }
     }
 }
