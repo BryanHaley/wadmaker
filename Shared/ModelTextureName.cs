@@ -8,6 +8,8 @@ namespace Shared
         private static Regex RemapTextureNameRegex = new Regex(@"^remap[0-9a-z]_(?<start1>\d{3})_(?<end1>\d{3})_(?<end2>\d{3})(?:\.bmp)?$", RegexOptions.IgnoreCase);
 
 
+        public static bool IsDmBase(string textureName) => DmBaseTextureNameRegex.IsMatch(textureName);
+
         public static bool IsDmBase(string textureName, out int color1Start, out int color1End, out int color2End)
         {
             if (DmBaseTextureNameRegex.IsMatch(textureName))
@@ -25,6 +27,8 @@ namespace Shared
                 return false;
             }
         }
+
+        public static bool IsRemap(string textureName) => RemapTextureNameRegex.IsMatch(textureName);
 
         public static bool IsRemap(string textureName, out int color1Start, out int color1End, out int color2End)
         {

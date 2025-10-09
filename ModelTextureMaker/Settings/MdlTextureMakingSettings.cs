@@ -186,8 +186,27 @@ namespace ModelTextureMaker.Settings
             var extension = Path.GetExtension(filename);
             var sb = new StringBuilder();
 
-            if (settings.ColorMask != null && settings.ColorMask != ColorMask.Main)
-                sb.Append($".color{(int)settings.ColorMask} {settings.ColorCount ?? 32}");
+            if (settings.ColorMask != null)
+            {
+                if (ModelTextureName.IsDmBase(Path.GetFileName(filename)))
+                {
+                    if (settings.ColorMask != ColorMask.Main)
+                        sb.Append($".color{(int)settings.ColorMask}");
+                }
+                else
+                {
+                    if (settings.ColorMask == ColorMask.Main)
+                    {
+                        sb.Append($".main {settings.ColorCount}");
+                    }
+                    else
+                    {
+                        sb.Append($".color{(int)settings.ColorMask}");
+                        if (settings.ColorCount != null)
+                            sb.Append($" {settings.ColorCount}");
+                    }
+                }
+            }
 
             if (settings.IsModelPortrait == true && (settings.ColorMask ?? ColorMask.Main) == ColorMask.Main)
                 sb.Append(".portrait");
