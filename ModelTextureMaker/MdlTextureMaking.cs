@@ -85,7 +85,7 @@ namespace ModelTextureMaker
                             continue;
                         }
 
-                        var texture = MakeTexture(textureName, textureSourceFiles, outputTexturePath, textureMakingSettings, conversionOutputDirectory, logger);
+                        var texture = MakeTexture(textureName, textureSourceFiles, textureMakingSettings, conversionOutputDirectory, logger);
                         if (texture != null)
                         {
                             var textureImage = new IndexedImage(texture.ImageData, texture.Width, texture.Height, texture.Palette);
@@ -229,10 +229,9 @@ namespace ModelTextureMaker
         /// then this method will skip making a texture if it already exists and is up-to-date. It will then also update <paramref name="currentFileHashes"/>
         /// with the file hashes of the given input images.
         /// </summary>
-        private static MdlTexture? MakeTexture(
+        internal static MdlTexture? MakeTexture(
             string textureName,
             MdlTextureSourceFileInfo[] sourceFiles,
-            string outputTexturePath,
             MdlTextureMakingSettings textureMakingSettings,
             string conversionOutputDirectory,
             Logger logger)
@@ -701,11 +700,12 @@ namespace ModelTextureMaker
             return texturesRemoved;
         }
 
+
         /// <summary>
         /// Returns all potential input files for the given directory.
         /// Bookkeeping files and directories are ignored.
         /// </summary>
-        private static IEnumerable<string> GetInputFilePaths(string inputDirectory)
+        internal static IEnumerable<string> GetInputFilePaths(string inputDirectory)
         {
             foreach (var path in Directory.EnumerateFiles(inputDirectory))
             {

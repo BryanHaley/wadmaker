@@ -48,5 +48,16 @@ namespace Shared
                 return false;
             }
         }
+
+        /// <summary>
+        /// Removes the remap color range numbers from the given texture name.
+        /// </summary>
+        public static string GetRemapName(string textureName)
+        {
+            if (IsRemap(textureName))
+                return textureName.Substring(0, 6);
+
+            return textureName;
+        }
     }
 }

@@ -22,6 +22,12 @@ namespace ModelTextureMaker
         public ImageFormat OutputImageFormat { get; set; }      // -format          Extracted images output format (png, jpg, gif, bmp or tga).
         public bool ExtractAsIndexed { get; set; }              // -indexed         Extracted images are indexed and contain the original texture's palette. Only works with png, gif and bmp.
 
+        // Replacement settings:
+        [MemberNotNullWhen(true, nameof(InputDirectory))]
+        [MemberNotNullWhen(true, nameof(ExtraInputFilePath))]
+        [MemberNotNullWhen(true, nameof(OutputFilePath))]
+        public bool ReplaceTextures { get; set; }               //                  Replacement mode is enabled when the first argument (path) is a directory, and the second path is an mdl file.
+
         // Other settings:
         public string? InputDirectory { get; set; }             // Build mode only
         public string? InputFilePath { get; set; }              // Mdl path
@@ -63,6 +69,10 @@ namespace ModelTextureMaker
                         SaveAsIndexed = settings.ExtractAsIndexed,
                     };
                     MdlTextureExtracting.ExtractTextures(settings.InputFilePath, settings.OutputDirectory, extractionSettings, logger);
+                }
+                else if (settings.ReplaceTextures)
+                {
+                    MdlTextureReplacing.ReplaceTextures(settings.InputDirectory, settings.ExtraInputFilePath, settings.OutputFilePath, logger);
                 }
                 else
                 {
@@ -133,6 +143,22 @@ namespace ModelTextureMaker
                         settings.OutputDirectory = paths[1];
                     else
                         settings.OutputDirectory = Path.Combine(Path.GetDirectoryName(settings.InputFilePath)!, Path.GetFileNameWithoutExtension(settings.InputFilePath) + "_extracted");
+                }
+            }
+            else if (paths.Length > 1 && File.Exists(paths[1]))
+            {
+                // Replace mode: input_dir input.mdl output.mdl*
+                var extension = Path.GetExtension(paths[1]).ToLowerInvariant();
+                if (extension == ".mdl")
+                {
+                    settings.ReplaceTextures = true;
+                    settings.InputDirectory = paths[0];
+                    settings.ExtraInputFilePath = paths[1];
+
+                    if (paths.Length > 2)
+                        settings.OutputFilePath = paths[2];
+                    else
+                        settings.OutputFilePath = settings.ExtraInputFilePath;
                 }
             }
             else

@@ -63,7 +63,7 @@ namespace ModelTextureMaker
                         var mainColorSettings = new MdlTextureSettings();
                         if (ModelTextureName.IsRemap(texture.Name, out var color1Start, out var color1End, out var color2End))
                         {
-                            baseFilename = texture.Name.Substring(0, 6);
+                            baseFilename = ModelTextureName.GetRemapName(texture.Name);
                             mainColorSettings.ColorMask = ColorMask.Main;
 
                             if (color2End < Constants.MaxPaletteSize - 1)
