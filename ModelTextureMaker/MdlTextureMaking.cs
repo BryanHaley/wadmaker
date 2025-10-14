@@ -431,7 +431,7 @@ namespace ModelTextureMaker
                     Array.Copy(indexedImage.Palette, 0, palette, paletteOffset, indexedImage.Palette.Length);
 
                     // The main image colors may be interrupted by the color1 and color2 ranges:
-                    if (hasNonContiguousPaletteRange)
+                    if (hasNonContiguousPaletteRange && indexedImage.Palette.Length > color1PaletteStart)
                     {
                         var offset = (byte)(color1Count + color2Count);
                         for (int i = 0; i < imageData.Length; i++)
