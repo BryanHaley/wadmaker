@@ -7,6 +7,7 @@ foreach ($platform in $platforms) {
     # NOTE: dotnet publish doesn't handle .pubxml files correctly, hence all the extra arguments here:
     dotnet publish .\WadMaker\WadMaker.csproj -c Release -f net6.0 -r $($platform.runtime) --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true --output .\WadMaker\bin\Release\net6.0\publish\$($platform.runtime)
     dotnet publish .\SpriteMaker\SpriteMaker.csproj -c Release -f net6.0 -r $($platform.runtime) --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true --output .\SpriteMaker\bin\Release\net6.0\publish\$($platform.runtime)
+    dotnet publish .\ModelTextureMaker\ModelTextureMaker.csproj -c Release -f net6.0 -r $($platform.runtime) --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true --output .\ModelTextureMaker\bin\Release\net6.0\publish\$($platform.runtime)
 }
 
 # Create release zip files:
@@ -19,6 +20,7 @@ foreach ($platform in $platforms) {
     # Copy files (executables, config files, examples, documentation, 3rd party licenses):
     Copy-Item -Path .\WadMaker\bin\Release\net6.0\publish\$($platform.runtime)\* -Destination $output_dir
     Copy-Item -Path .\SpriteMaker\bin\Release\net6.0\publish\$($platform.runtime)\* -Destination $output_dir
+    Copy-Item -Path .\ModelTextureMaker\bin\Release\net6.0\publish\$($platform.runtime)\* -Destination $output_dir
     Copy-Item -Path .\files\* -Destination $output_dir
     Copy-Item -Path '.\ImageSharp LICENSE' -Destination $output_dir
     Copy-Item -Path '.\ImageSharp THIRD-PARTY-NOTICES.TXT' -Destination $output_dir
