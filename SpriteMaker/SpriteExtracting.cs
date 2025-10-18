@@ -161,10 +161,12 @@ namespace SpriteMaker
             {
                 var spriteFrame = sprite.Frames[i];
 
-                var filenameSettings = new SpriteSettings {
-                    SpriteType = sprite.Type,
-                    SpriteTextureFormat = sprite.TextureFormat,
-                };
+                var filenameSettings = new SpriteSettings();
+                if (i == 0)
+                {
+                    filenameSettings.SpriteType = sprite.Type;
+                    filenameSettings.SpriteTextureFormat = sprite.TextureFormat;
+                }
 
                 if (sprite.Frames.Count > 1)
                     filenameSettings.FrameNumber = i;
