@@ -6,9 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <StartupObject>WadMaker.Program</StartupObject>
-    <AssemblyVersion>1.3</AssemblyVersion>
-    <FileVersion>1.3</FileVersion>
-    <Version>1.3</Version>
+    <AssemblyVersion>1.4</AssemblyVersion>
+    <FileVersion>1.4</FileVersion>
+    <Version>1.4</Version>
     <Title>WadMaker</Title>
     <Authors>Pieter Witvoet</Authors>
     <Company></Company>
