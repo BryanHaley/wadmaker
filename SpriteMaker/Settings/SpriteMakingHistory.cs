@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Shared.JSON;
+using System.Text.Json;
 using FileInfo = Shared.FileSystem.FileInfo;
 
 namespace SpriteMaker.Settings
@@ -24,6 +25,7 @@ namespace SpriteMaker.Settings
         {
             SerializerOptions = new JsonSerializerOptions();
             SerializerOptions.Converters.Add(new SpriteMakingHistoryJsonSerializer());
+            SerializerOptions.TypeInfoResolver = new NoReflectionJsonTypeInfoResolver();
         }
 
 

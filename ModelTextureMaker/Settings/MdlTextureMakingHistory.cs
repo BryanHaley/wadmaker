@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Shared.JSON;
+using System.Text.Json;
 using FileInfo = Shared.FileSystem.FileInfo;
 
 namespace ModelTextureMaker.Settings
@@ -24,6 +25,7 @@ namespace ModelTextureMaker.Settings
         {
             SerializerOptions = new JsonSerializerOptions();
             SerializerOptions.Converters.Add(new MdlTextureMakingHistoryJsonSerializer());
+            SerializerOptions.TypeInfoResolver = new NoReflectionJsonTypeInfoResolver();
         }
 
 

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Shared.JSON;
+using System.Text.Json;
 using FileInfo = Shared.FileSystem.FileInfo;
 
 namespace WadMaker.Settings
@@ -11,6 +12,7 @@ namespace WadMaker.Settings
         {
             SerializerOptions = new JsonSerializerOptions();
             SerializerOptions.Converters.Add(new WadMakingHistoryJsonSerializer());
+            SerializerOptions.TypeInfoResolver = new NoReflectionJsonTypeInfoResolver();
         }
 
 
