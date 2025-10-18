@@ -21,7 +21,14 @@
 ## Overview
 WadMaker is a command-line tool that can turn directories full of images into Half-Life wad files. Existing wad files can be updated more quickly because only added, modified and removed images are processed by default. WadMaker can also extract textures from wad and bsp files, and remove or replace embedded textures from bsp files.
 
-WadMaker accepts image files (png, jpg, gif, bmp, tga), Photoshop files (psd, psb) and Krita files (kra, ora), and can be configured to call external conversion tools for other formats. It will automatically create a suitable 256-color palette for each image. It will also apply a limited form of dithering, which can be disabled if necessary. For transparent textures, the alpha channel of the input image is compared against a configurable threshold, but it is also possible to treat a specific input color as transparent. For water textures, the fog color and intensity are derived from the image itself, but they can also be specified explicitly. All these texture-specific settings can be overridden with a plain-text wadmaker.config file in the images directory.
+WadMaker accepts the following image file formats:
+- Png, jpg, gif, bmp and tga files.
+- Photoshop files (.psd, .psb) that have been saved with 'Maximize compatibility' enabled.
+- Krita files (.kra, .ora).
+- Paint.NET files (.pdn).
+- Other formats can be used with the help of external conversion tools.
+
+It will automatically create a suitable 256-color palette for each image. It will also apply a limited form of dithering, which can be disabled if necessary. For transparent textures, the alpha channel of the input image is compared against a configurable threshold, but it is also possible to treat a specific input color as transparent. For water textures, the fog color and intensity are derived from the image itself, but they can also be specified explicitly. All these texture-specific settings can be overridden with a plain-text wadmaker.config file in the images directory.
 
 ### Intended workflow
 Existing workflows sometimes involve a lot of steps, such as exporting or converting images to an 8-bit indexed format, manually adjusting palettes for special texture types, marking transparent areas with special colors, opening a GUI tool, dragging images into it, then saving the modified wad file, and so on.
@@ -68,7 +75,7 @@ A settings line starts with a texture name or a name pattern, followed by one or
     *            dither-scale: 0.5
     bluewater    water-fog: 0 0 255 127
     {lab*        dithering: none     transparency-threshold: 200
-    *.pdn        converter: '"C:\Tools\PdnToPngConverter.exe"'       arguments: '/in="{input}" /out="{output}"'
+    *.xcf        converter: '"C:\Tools\XcfToPngConverter.exe"'       arguments: '/in="{input}" /out="{output}"'
 This sets the dither-scale to 0.5 for all textures, and explicitly defines the water fog color and intensity for a texture named 'bluewater'. It also disables dithering and sets a custom transparency threshold for all textures whose name starts with '{lab'. Finally, it tells WadMaker to call a converter application for each .pdn file in the image directory - WadMaker will then use the output image produced by that application.
 
 If there are multiple matching rules, all of their settings will be applied in order of appearance. In the above example, a texture named `bluewater` will use a dither-scale of 0.5 (because of the `*` rule), and a water-fog color/intensity of 0,0,255,127 (because of the `bluewater` rule). If the `bluewater` rule would also have specified a dither-scale, then that dither-scale would have been used instead, because the `bluewater` rule comes after the `*` rule.
@@ -182,7 +189,7 @@ To automatically convert Aseprite files, add the following lines to your `wadmak
     *.ase           converter: '"C:\Applications\Aseprite\aseprite.exe"' arguments: '-b "{input}" --save-as "{output}.png"'
     *.aseprite      converter: '"C:\Applications\Aseprite\aseprite.exe"' arguments: '-b "{input}" --save-as "{output}.png"'
 
-The `-b` switch prevents Aseprite from starting its UI. WadMaker then reads the resulting png file uses it to create a texture. See [Aseprite Command Line Interface ](https://www.aseprite.org/docs/cli/) for more information about using Aseprite from the command-line.
+The `-b` switch prevents Aseprite from starting its UI. WadMaker then reads the resulting png file and uses it to create a texture. See [Aseprite Command Line Interface ](https://www.aseprite.org/docs/cli/) for more information about using Aseprite from the command-line.
 
 ## Credits
 - Thanks to [Yuraj](https://yuraj.ucoz.com) for his unofficial wad3 file format specification.

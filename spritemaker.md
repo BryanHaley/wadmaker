@@ -23,7 +23,14 @@
 ## Overview
 SpriteMaker is a command-line tool that converts directories full of images to Half-Life sprites. Existing sprite directories can be updated quickly because only added, modified and removed images are processed. SpriteMaker can also convert sprites back to images.
 
-SpriteMaker accepts image files (png, jpg, gif, bmp, tga), Photoshop files (psd, psb) and Krita files (kra, ora), and can be configured to call external conversion tools for other formats. It will automatically create a suitable 256-color palette for each sprite. By default it also applies a limited form of dithering to single-frame sprites. For index-alpha and alpha-test sprites, SpriteMaker expects input images with transparency, but it can also be configured to accept grayscale images or images where transparent parts are marked with a special color. All these settings can be specified in a plain-text spritemaker.config file in the images directory. The most common settings, such as sprite orientation and texture format, can also be set with input image filenames.
+SpriteMaker accepts the following image file formats:
+- Png, jpg, gif, bmp and tga files.
+- Photoshop files (.psd, .psb) that have been saved with 'Maximize compatibility' enabled.
+- Krita files (.kra, .ora).
+- Paint.NET files (.pdn).
+- Other formats can be used with the help of external conversion tools.
+
+It will automatically create a suitable 256-color palette for each sprite. By default it also applies a limited form of dithering to single-frame sprites. For index-alpha and alpha-test sprites, SpriteMaker expects input images with transparency, but it can also be configured to accept grayscale images or images where transparent parts are marked with a special color. All these settings can be specified in a plain-text spritemaker.config file in the images directory. The most common settings, such as sprite orientation and texture format, can also be set with input image filenames.
 
 ### Intended workflow
 Existing workflows sometimes involve a lot of steps, such as exporting or converting images to an 8-bit indexed format, manually creating a palette and applying it to multiple frames, marking transparent areas with special colors, opening a GUI tool, dragging images into it, then saving the modified sprites, and so on.
@@ -41,7 +48,7 @@ For basic usage, directories and files can be dragged onto `SpriteMaker.exe`:
 The behavior of SpriteMaker can be modified with several command-line options. To use these, you will have to call SpriteMaker from a command-line or from a batch file. The following options are available (options must be put before the input directory or file path):
 - **-subdirs** - Makes SpriteMaker also process sub-directories, creating a matching output folder hierarchy.
 - **-full** - Forces SpriteMaker to rebuild all sprites, instead of processing only added, modified and deleted images.
-- **-subdirremoval** - Enables deleting of output sub-directories, when input sub-directories are removed.
+- **-subdirremoval** - Enables deleting of output sub-directories, when input sub-directories are removed. Be careful with this option if your output sub-directories also contain sprites that were not created by SpriteMaker - those will also be removed.
 - **-extract** - Switches to extraction mode. This enables the extraction of directories full of sprites.
 - **-spritesheet** - Animated sprites will be extracted as spritesheet images, instead of a sequence of images.
 - **-overwrite** - Enables overwriting of existing image files when extracting sprites to images.
@@ -97,7 +104,7 @@ A settings line starts with a sprite name or a name pattern, followed by one or 
     *            dither-scale: 0.5
     *.at         transparency-color: 0 0 255
     fire         type: oriented      dithering: none
-    *.pdn        converter: '"C:\Tools\PdnToPngConverter.exe"'       arguments: '/in="{input}" /out="{output}"'
+    *.xcf        converter: '"C:\Tools\XcfToPngConverter.exe"'       arguments: '/in="{input}" /out="{output}"'
 This sets the dither-scale to 0.5 for all sprites, and it tells SpriteMaker to treat blue (0 0 255) as transparent for all images whose filename contains '.at' (the alpha-transparency setting shorthand). It also sets the sprite type for the image named 'fire' to oriented, and disables dithering for that image. Finally, it tells SpriteMaker to call a converter application for each .pdn file in the image directory - SpriteMaker will then use the output image(s) produced by that application.
 
 If there are multiple matching rules, all of their settings will be applied in order of appearance. In the above example, a sprite named `fire` will use a dither-scale of 0.5 (because of the `*` rule) but dithering will also be disabled for it (because of the `fire` rule). If the `fire` rule would also have specified a dither-scale, then that dither-scale would have been used instead, because the `fire` rule comes after the `*` rule.
