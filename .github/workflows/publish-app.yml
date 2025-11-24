@@ -1,0 +1,17 @@
+name: publish
+
+on:
+  push:
+    branches: [ master ]
+
+env:
+  DOTNET_VERSION: '8.0.22'
+
+jobs:
+  publish-lin:
+    - uses: ./.github/actions/dotnet-publish-zip
+      with:
+        app-name: WadMaker
+        app-path: WadMaker
+        project-file: WadMaker.csproj
+        runtime: linux-x64
