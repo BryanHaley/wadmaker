@@ -89,6 +89,7 @@ jobs:
           app-name: WadMaker
           app-path: WadMaker
           project-file: WadMaker.csproj
+          runtime: win-x86
       
       - name: Build SpriteMaker
         uses: ./.github/actions/dotnet-publish-zip-win
@@ -96,6 +97,7 @@ jobs:
           app-name: SpriteMaker
           app-path: SpriteMaker
           project-file: SpriteMaker.csproj
+          runtime: win-x86
       
       - name: Build ModelTextureMaker
         uses: ./.github/actions/dotnet-publish-zip-win
@@ -103,6 +105,7 @@ jobs:
           app-name: ModelTextureMaker
           app-path: ModelTextureMaker
           project-file: ModelTextureMaker.csproj
+          runtime: win-x86
 
   build-mac-universal:
     runs-on: macos-15
