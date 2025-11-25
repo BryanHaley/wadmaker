@@ -83,3 +83,41 @@ jobs:
           project-file: ModelTextureMaker.csproj
           runtime: win-x64
           shell: powershell
+
+  build-win-x86:
+    runs-on: windows-2025
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build WadMaker
+        uses: ./.github/actions/dotnet-publish-zip-win
+        with:
+          app-name: WadMaker
+          app-path: WadMaker
+          project-file: WadMaker.csproj
+          runtime: win-x86
+          shell: powershell
+      
+      - name: Build SpriteMaker
+        uses: ./.github/actions/dotnet-publish-zip-win
+        with:
+          app-name: SpriteMaker
+          app-path: SpriteMaker
+          project-file: SpriteMaker.csproj
+          runtime: win-x86
+          shell: powershell
+      
+      - name: Build ModelTextureMaker
+        uses: ./.github/actions/dotnet-publish-zip-win
+        with:
+          app-name: ModelTextureMaker
+          app-path: ModelTextureMaker
+          project-file: ModelTextureMaker.csproj
+          runtime: win-x86
+          shell: powershell
