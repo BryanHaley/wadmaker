@@ -20,7 +20,7 @@ runs:
       working-directory: ${{ inputs.app-path }}
       shell: ${{ inputs.shell }}
       run: |
-        dotnet build --configuration Release --no-restore
+        dotnet build --configuration Release
         dotnet publish ${{ inputs.project-file }} \
           -c Release \
           -o publish/${{ inputs.runtime }} \
