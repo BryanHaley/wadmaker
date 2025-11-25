@@ -40,10 +40,10 @@ runs:
         lipo \
           -create ./${{ inputs.app-name }}.x64 ./${{ inputs.app-name }}.arm64 \
           -output ${{ inputs.app-name }}
-        zip ${{ inputs.app-name }}-osx-universal.zip ${{ inputs.app-name }}
+        zip ${{ inputs.app-name }}-mac-universal.zip ${{ inputs.app-name }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.app-name }}-osx-universal
-        path: ${{ inputs.app-path }}/${{ inputs.app-name }}-osx-universal.zip
+        name: ${{ inputs.app-name }}-mac-universal
+        path: ${{ inputs.app-path }}/${{ inputs.app-name }}-mac-universal.zip
