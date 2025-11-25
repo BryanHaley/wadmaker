@@ -9,9 +9,19 @@ env:
 
 jobs:
   publish-lin:
-    - uses: ./.github/actions/dotnet-publish-zip
-      with:
-        app-name: WadMaker
-        app-path: WadMaker
-        project-file: WadMaker.csproj
-        runtime: linux-x64
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - uses: ./.github/actions/dotnet-publish-zip
+        with:
+          app-name: WadMaker
+          app-path: WadMaker
+          project-file: WadMaker.csproj
+          runtime: linux-x64
