@@ -105,7 +105,7 @@ jobs:
           project-file: ModelTextureMaker.csproj
 
   build-mac-universal:
-    runs-on: ubuntu-24.04
+    runs-on: macos-15
 
     steps:
       - uses: actions/checkout@v3
@@ -116,21 +116,21 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Build WadMaker
-        uses: ./.github/actions/dotnet-publish-zip-lin
+        uses: ./.github/actions/dotnet-publish-zip-mac
         with:
           app-name: WadMaker
           app-path: WadMaker
           project-file: WadMaker.csproj
       
       - name: Build SpriteMaker
-        uses: ./.github/actions/dotnet-publish-zip-lin
+        uses: ./.github/actions/dotnet-publish-zip-mac
         with:
           app-name: SpriteMaker
           app-path: SpriteMaker
           project-file: SpriteMaker.csproj
       
       - name: Build ModelTextureMaker
-        uses: ./.github/actions/dotnet-publish-zip-lin
+        uses: ./.github/actions/dotnet-publish-zip-mac
         with:
           app-name: ModelTextureMaker
           app-path: ModelTextureMaker
