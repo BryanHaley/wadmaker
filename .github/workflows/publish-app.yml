@@ -26,3 +26,17 @@ jobs:
           project-file: WadMaker.csproj
           runtime: linux-x64
           shell: bash
+      - uses: ./.github/actions/dotnet-publish-zip
+        with:
+          app-name: SpriteMaker
+          app-path: SpriteMaker
+          project-file: SpriteMaker.csproj
+          runtime: linux-x64
+          shell: bash
+      - uses: ./.github/actions/dotnet-publish-zip
+        with:
+          app-name: ModelTextureMaker
+          app-path: ModelTextureMaker
+          project-file: ModelTextureMaker.csproj
+          runtime: linux-x64
+          shell: bash
