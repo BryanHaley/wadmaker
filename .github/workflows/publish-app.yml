@@ -1,4 +1,4 @@
-name: publish
+name: build-app
 
 on:
   push:
@@ -8,7 +8,7 @@ env:
   DOTNET_VERSION: '8.0.319'
 
 jobs:
-  publish-lin:
+  build-lin-x64:
     runs-on: ubuntu-24.04
 
     steps:
@@ -19,24 +19,67 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - uses: ./.github/actions/dotnet-publish-zip
+      - name: Build WadMaker
+        uses: ./.github/actions/dotnet-publish-zip
         with:
           app-name: WadMaker
           app-path: WadMaker
           project-file: WadMaker.csproj
           runtime: linux-x64
           shell: bash
-      - uses: ./.github/actions/dotnet-publish-zip
+      
+      - name: Build SpriteMaker
+        uses: ./.github/actions/dotnet-publish-zip
         with:
           app-name: SpriteMaker
           app-path: SpriteMaker
           project-file: SpriteMaker.csproj
           runtime: linux-x64
           shell: bash
-      - uses: ./.github/actions/dotnet-publish-zip
+      
+      - name: Build ModelTextureMaker
+        uses: ./.github/actions/dotnet-publish-zip
         with:
           app-name: ModelTextureMaker
           app-path: ModelTextureMaker
           project-file: ModelTextureMaker.csproj
           runtime: linux-x64
           shell: bash
+
+  build-win-x64:
+    runs-on: windows-2025
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build WadMaker
+        uses: ./.github/actions/dotnet-publish-zip
+        with:
+          app-name: WadMaker
+          app-path: WadMaker
+          project-file: WadMaker.csproj
+          runtime: win-x64
+          shell: cmd
+      
+      - name: Build SpriteMaker
+        uses: ./.github/actions/dotnet-publish-zip
+        with:
+          app-name: SpriteMaker
+          app-path: SpriteMaker
+          project-file: SpriteMaker.csproj
+          runtime: win-x64
+          shell: cmd
+      
+      - name: Build ModelTextureMaker
+        uses: ./.github/actions/dotnet-publish-zip
+        with:
+          app-name: ModelTextureMaker
+          app-path: ModelTextureMaker
+          project-file: ModelTextureMaker.csproj
+          runtime: win-x64
+          shell: cmd
