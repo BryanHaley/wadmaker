@@ -21,7 +21,7 @@ runs:
       shell: ${{ inputs.shell }}
       run: |
         dotnet build --configuration Release
-        dotnet publish ${{ inputs.project-file }} \
+        dotnet publish \
           -c Release \
           -o publish/${{ inputs.runtime }} \
           -r ${{ inputs.runtime }}
