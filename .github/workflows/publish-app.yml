@@ -25,3 +25,4 @@ jobs:
           app-path: WadMaker
           project-file: WadMaker.csproj
           runtime: linux-x64
+          shell: bash

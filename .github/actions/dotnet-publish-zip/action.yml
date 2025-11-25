@@ -10,11 +10,15 @@ inputs:
   runtime:
     required: true
     default: linux-x64
+  shell:
+    required: true
+    default: bash
 runs:
   using: "composite"
   steps:
     - name: Build and publish
       working-directory: ${{ inputs.app-path }}
+      shell: ${{ inputs.shell }}
       run: |
         dotnet build --configuration Release --no-restore
         dotnet publish ${{ inputs.project-file }} \
