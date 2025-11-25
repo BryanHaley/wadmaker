@@ -23,14 +23,14 @@ runs:
         dotnet build --configuration Release
         dotnet publish ${{ inputs.project-file }} `
           -c Release `
-          -o publish/${{ inputs.runtime }} `
+          -o publish\${{ inputs.runtime }} `
           -r ${{ inputs.runtime }}
 
-        Move-Item -Path publish/${{ inputs.runtime }}/${{ inputs.app-name }} -Destination ./${{ inputs.app-name }}
-        Compress-Archive -Path publish/${{ inputs.runtime }} -Destination ${{ inputs.app-name }}-${{ inputs.runtime }}.zip
+        Move-Item -Path publish\${{ inputs.runtime }}\${{ inputs.app-name }} -Destination .\${{ inputs.app-name }}
+        Compress-Archive -Path publish\${{ inputs.runtime }} -Destination ${{ inputs.app-name }}-${{ inputs.runtime }}.zip
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.app-name }}-${{ inputs.runtime }}
-        path: ${{ inputs.app-path }}/${{ inputs.app-name }}-${{ inputs.runtime }}.zip
+        path: ${{ inputs.app-path }}\${{ inputs.app-name }}-${{ inputs.runtime }}.zip
