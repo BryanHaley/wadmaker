@@ -40,6 +40,7 @@ runs:
         lipo \
           -create ./${{ inputs.app-name }}.x64 ./${{ inputs.app-name }}.arm64 \
           -output ${{ inputs.app-name }}
+        cp MAC_README.txt ${{ inputs.app-name }}_MAC_README.txt
         zip ${{ inputs.app-name }}-mac-universal.zip ${{ inputs.app-name }} ${{ inputs.app-name }}_MAC_README.txt
 
     - name: Upload artifact
