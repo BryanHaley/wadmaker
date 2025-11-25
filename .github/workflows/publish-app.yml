@@ -20,7 +20,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Build WadMaker
-        uses: ./.github/actions/dotnet-publish-zip
+        uses: ./.github/actions/dotnet-publish-zip-lin
         with:
           app-name: WadMaker
           app-path: WadMaker
@@ -29,7 +29,7 @@ jobs:
           shell: bash
       
       - name: Build SpriteMaker
-        uses: ./.github/actions/dotnet-publish-zip
+        uses: ./.github/actions/dotnet-publish-zip-lin
         with:
           app-name: SpriteMaker
           app-path: SpriteMaker
@@ -38,7 +38,7 @@ jobs:
           shell: bash
       
       - name: Build ModelTextureMaker
-        uses: ./.github/actions/dotnet-publish-zip
+        uses: ./.github/actions/dotnet-publish-zip-lin
         with:
           app-name: ModelTextureMaker
           app-path: ModelTextureMaker
@@ -58,28 +58,28 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Build WadMaker
-        uses: ./.github/actions/dotnet-publish-zip
+        uses: ./.github/actions/dotnet-publish-zip-win
         with:
           app-name: WadMaker
           app-path: WadMaker
           project-file: WadMaker.csproj
           runtime: win-x64
-          shell: cmd
+          shell: powershell
       
       - name: Build SpriteMaker
-        uses: ./.github/actions/dotnet-publish-zip
+        uses: ./.github/actions/dotnet-publish-zip-win
         with:
           app-name: SpriteMaker
           app-path: SpriteMaker
           project-file: SpriteMaker.csproj
           runtime: win-x64
-          shell: cmd
+          shell: powershell
       
       - name: Build ModelTextureMaker
-        uses: ./.github/actions/dotnet-publish-zip
+        uses: ./.github/actions/dotnet-publish-zip-win
         with:
           app-name: ModelTextureMaker
           app-path: ModelTextureMaker
           project-file: ModelTextureMaker.csproj
           runtime: win-x64
-          shell: cmd
+          shell: powershell

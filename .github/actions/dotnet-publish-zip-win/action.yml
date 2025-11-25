@@ -8,11 +8,11 @@ inputs:
   project-file:
     required: true
   runtime:
-    required: true
-    default: linux-x64
+    required: false
+    default: win-x64
   shell:
-    required: true
-    default: bash
+    required: false
+    default: powershell
 runs:
   using: "composite"
   steps:
@@ -30,8 +30,8 @@ runs:
           -p:PublishSingleFile=true \
           -p:IncludeNativeLibrariesForSelfExtract=true
 
-        mv publish/${{ inputs.runtime }}/${{ inputs.app-name }} ./
-        zip ${{ inputs.app-name }}-${{ inputs.runtime }}.zip ${{ inputs.app-name }}
+        Move-Item -Path publish/${{ inputs.runtime }}/${{ inputs.app-name }} -Destination ./${{ inputs.app-name }}
+        Compress-Archive -Path publish/${{ inputs.runtime }} -Destination ${{ inputs.app-name }}-${{ inputs.runtime }}.zip
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
